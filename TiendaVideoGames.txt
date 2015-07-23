@@ -1,0 +1,49 @@
+create database tienda_videogames;
+
+use tienda_videogames;
+
+create table videogame
+(
+	idjuego int,
+    titulo varchar(100) not null,
+    descripcion varchar(255) not null,
+    restriccion_edad int not null,
+    caratula varchar(255),
+    valor int not null,
+    constraint pk_videogame primary key (idjuego),
+    constraint uq_titulo_videogame unique (titulo)
+);
+
+create table serialnumber
+(
+	serie varchar(11),
+    estado int not null,
+    idjuego int not null,
+    constraint pk_serialnumber primary key (serie),
+    constraint fk_serialnumber_juego foreign key (idjuego) references videogame(idjuego)    
+);
+
+create table cliente
+(
+	username varchar(20),
+    pass varchar(10) not null,
+    rut int not null,
+    nombre varchar(30) not null,
+    apellido varchar(30) not null,
+    fecha_nacimiento date not null,    
+    billetera int not null,
+    constraint pk_cliente primary key (username),
+    constraint uq_rut unique (rut)
+);
+
+create table biblioteca
+(
+	idventa int,
+    username varchar(20) not null,
+    idjuego int not null,
+    serie varchar(11) not null,
+    constraint pk_biblioteca primary key (idventa), 
+    constraint fk_cliente_biblioteca foreign key (username) references cliente(username),
+    constraint fk_juego_biblioteca foreign key (idjuego) references videogame(idjuego),
+    constraint fk_serialnumber_biblioteca foreign key (serie) references serialnumber(serie)
+);
